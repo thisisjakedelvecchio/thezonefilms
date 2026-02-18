@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In The Zone Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #E8601C;
+    --black: #0a0a0a;
+    --card: #111;
+    --card-border: rgba(255,255,255,0.07);
+    --cream: #e8e0d4;
+    --white: #f5f5f0;
+    --gray: #888;
+    --dim: #555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px;
+    position: relative;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.025'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 48px;
+    transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(232,96,28,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(232,96,28,0.06);
+  }
+
+  .card--hero {
+    padding: 72px 56px;
+    border-left: 3px solid var(--orange);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card--hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .card--hero::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(232,96,28,0.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card--hero > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .card--accent {
+    border-left: 3px solid var(--orange);
+  }
+
+  .hero-bokeh {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-bokeh--bl {
+    bottom: -20%;
+    left: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(232,96,28,0.04) 0%, transparent 60%);
+  }
+
+  .card--contact {
+    border: 1px solid var(--card-border);
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 36px;
+  }
+
+  .hero-title span { display: block; }
+  .hero-title .studios { color: var(--orange); }
+
+  .hero-rule {
+    width: 50px;
+    height: 2px;
+    background: var(--orange);
+    border: none;
+    margin-bottom: 32px;
+  }
+
+  .hero-opening {
+    max-width: 580px;
+    font-size: 1.1rem;
+    line-height: 1.85;
+    color: var(--cream);
+    opacity: 0.9;
+  }
+
+  .handle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .handle-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 32px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+  }
+
+  .handle-card:hover {
+    border-color: rgba(232,96,28,0.3);
+    background: rgba(232,96,28,0.04);
+  }
+
+  .handle-card h3 {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(232,96,28,0.2);
+  }
+
+  .handle-card p {
+    font-size: 0.92rem;
+    color: var(--cream);
+    opacity: 0.75;
+    line-height: 1.7;
+  }
+
+  .formats-text {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    opacity: 0.85;
+  }
+
+  .formats-text span {
+    color: var(--dim);
+    margin: 0 14px;
+  }
+
+  .credit-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .credit-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .credit-item:first-child { padding-top: 0; }
+  .credit-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .credit-title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--white);
+    min-width: 180px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a.credit-title:hover {
+    color: var(--orange);
+  }
+
+  .credit-role {
+    font-size: 0.88rem;
+    color: var(--cream);
+    opacity: 0.5;
+  }
+
+  .credit-position {
+    font-size: 0.88rem;
+    color: var(--orange);
+    margin-left: auto;
+    opacity: 0.85;
+  }
+
+  .background-layout {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .background-photo {
+    width: 140px;
+    min-width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 1px solid rgba(255,255,255,0.07);
+    filter: grayscale(50%);
+  }
+
+  .background-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .background-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--white);
+  }
+
+  .background-title {
+    font-size: 0.88rem;
+    color: var(--orange);
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+
+  .background-text {
+    max-width: 560px;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--cream);
+    opacity: 0.8;
+  }
+
+  .contact-cta {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--cream);
+    opacity: 0.85;
+    margin-bottom: 32px;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .contact-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .contact-detail {
+    font-size: 0.92rem;
+    color: var(--cream);
+    opacity: 0.6;
+    text-decoration: none;
+    transition: color 0.2s, opacity 0.2s;
+  }
+
+  .contact-detail:hover {
+    color: var(--orange);
+    opacity: 1;
+  }
+
+  .contact-btn {
+    display: inline-block;
+    width: auto;
+    padding: 14px 36px;
+    background: var(--orange);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    border-radius: 24px;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .contact-btn:hover {
+    background: #cc5218;
+    transform: translateY(-1px);
+  }
+
+  .footer-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 8px;
+    margin-bottom: 120px;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+  }
+
+  .footer-url {
+    font-size: 0.82rem;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+
+  .footer-url:hover { color: var(--orange); }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 20px; }
+    .card { padding: 32px; }
+    .card--hero { padding: 48px 32px; }
+    .handle-grid { grid-template-columns: 1fr; gap: 16px; }
+    .row { grid-template-columns: 1fr; }
+    .credit-item { flex-direction: column; gap: 4px; }
+    .credit-position { margin-left: 0; }
+    .credit-title { min-width: auto; }
+    .background-layout { flex-direction: column; gap: 24px; }
+    .background-photo { width: 120px; min-width: 120px; height: 120px; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-title { animation: fadeUp 0.7s ease both; }
+  .hero-rule { animation: fadeUp 0.7s ease 0.15s both; }
+  .hero-opening { animation: fadeUp 0.7s ease 0.3s both; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="card card--hero">
+    <div class="hero-bokeh hero-bokeh--bl"></div>
+    <h1 class="hero-title">
+      <span>In The Zone</span>
+      <span class="studios">Studios</span>
+    </h1>
+    <hr class="hero-rule">
+    <p class="hero-opening">In The Zone Studios is a production services company based in Los Angeles. We handle the logistics, crew, locations, and production infrastructure so you can focus on the creative.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-label">What We Handle</div>
+    <div class="handle-grid">
+      <div class="handle-card">
+        <h3>Prep</h3>
+        <p>We work with you and your team to put the production together. Budget, schedule, crew, locations, gear, permits.</p>
+      </div>
+      <div class="handle-card">
+        <h3>Production</h3>
+        <p>We're on set with you handling the day to day. Call sheets, coordination, budget tracking, logistics, problem solving.</p>
+      </div>
+      <div class="handle-card">
+        <h3>Wrap</h3>
+        <p>We make sure nothing falls through the cracks after the shoot. Paperwork, returns, payroll, reconciliation, deliverables.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Formats</div>
+    <p class="formats-text">Features <span>/</span> Short Films <span>/</span> Music Videos <span>/</span> Commercials</p>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Background</div>
+    <div class="background-layout">
+      <img src="data:image/jpeg;base64,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" alt="Jake DelVecchio" class="background-photo">
+      <div class="background-right">
+        <span class="background-name">Jake DelVecchio</span>
+        <span class="background-title">Founder &amp; Producer</span>
+        <p class="background-text">I've been working in film production in Los Angeles for over five years. I started out in development and coordination across features, shorts, music videos, and commercials before starting In The Zone Studios.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Credits</div>
+    <div class="credit-list">
+      <div class="credit-item">
+        <a href="https://www.imdb.com/title/tt34492861/" target="_blank" class="credit-title">311 "Full Bloom"</a>
+        <span class="credit-role">Music Video</span>
+        <span class="credit-position">Producer</span>
+      </div>
+      <div class="credit-item">
+        <a href="https://www.instagram.com/reel/DUd6WkqAYZF/?igsh=NTc4MTIwNjQ2YQ==" target="_blank" class="credit-title">Cold Hug</a>
+        <span class="credit-role">Short Film</span>
+        <span class="credit-position">Producer</span>
+      </div>
+      <div class="credit-item">
+        <a href="https://www.imdb.com/title/tt29259461/" target="_blank" class="credit-title">Plight</a>
+        <span class="credit-role">Feature Film</span>
+        <span class="credit-position">Production Coordinator</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card--contact">
+    <div class="section-label">Contact</div>
+    <p class="contact-cta">Not quite in production yet? We do development work too. Let's talk.</p>
+    <div class="contact-row">
+      <div class="contact-info">
+        <span class="contact-name">Jake DelVecchio</span>
+        <a href="mailto:jake@thezonefilms.com" class="contact-detail">jake@thezonefilms.com</a>
+        <a href="tel:3154300584" class="contact-detail">315-430-0584</a>
+      </div>
+      <a href="https://calendly.com/jakedelvecchio/30min" target="_blank" class="contact-btn">Book a Call</a>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="footer-logo">In The Zone Studios</span>
+    <a href="https://thezonefilms.com" target="_blank" class="footer-url">thezonefilms.com</a>
+  </div>
+
+</div>
+</body>
+</html>
